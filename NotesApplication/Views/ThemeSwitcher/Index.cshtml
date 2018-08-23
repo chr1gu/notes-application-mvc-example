@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Change theme";
+}
+
+<h1>Select theme</h1>
+
+<br>
+<div class="dropdown">
+    @await Html.PartialAsync("_ThemeSwitcherDropDown")
+</div>
+
+<br>
+<a asp-area="" asp-controller="Notes" asp-action="Index">Back to notes list</a>

@@ -1,0 +1,51 @@
+﻿@model NotesApplication.Models.ViewModels.NotesListViewModel
+
+@{
+    ViewData["Title"] = "Notes";
+}
+
+
+<h1>Notes</h1>
+
+<ul class="list-inline">
+    <li>
+        <ul class="list-inline">
+            <li>Order by:</li>
+            <li class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                    @(Model.AvailableSortOrders[Model.CurrentSortOrder])
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    @foreach (var sortOrder in Model.AvailableSortOrders)
+                    {
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?orderBy=@(sortOrder.Key)&hideFinished=@(Model.HideFinished)">@(sortOrder.Value)</a></li> 
+                    }
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <label class="form-check-label">
+            <input type="checkbox" class="form-check-input"> Hide finished
+        </label>
+    </li>
+</ul>
+
+<hr />
+
+@foreach (var note in Model.Notes)
+{
+    <div class="row">
+        <div class="col-sm-2">
+            x
+        </div>
+        <div class="col-sm-8">
+            <h2>@note.Title</h2>
+            <p>@note.Description</p>
+        </div>
+        <div class="col-sm-2">
+            <a class="btn btn-default" asp-area="" asp-controller="Notes" asp-action="Edit" asp-route-id="@note.Id">Edit</a>
+        </div>
+    </div>
+}

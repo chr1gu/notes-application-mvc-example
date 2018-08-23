@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotesApplication", "NotesApplication\NotesApplication.csproj", "{51925999-D2C2-4BCB-8362-7A5E21EDB598}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotesApplication.Tests", "NotesApplication.Tests\NotesApplication.Tests.csproj", "{E82D3607-0073-4C62-B493-1B543AF9ED5B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{51925999-D2C2-4BCB-8362-7A5E21EDB598}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51925999-D2C2-4BCB-8362-7A5E21EDB598}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51925999-D2C2-4BCB-8362-7A5E21EDB598}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E82D3607-0073-4C62-B493-1B543AF9ED5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E82D3607-0073-4C62-B493-1B543AF9ED5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E82D3607-0073-4C62-B493-1B543AF9ED5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E82D3607-0073-4C62-B493-1B543AF9ED5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

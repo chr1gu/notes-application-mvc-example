@@ -1,0 +1,15 @@
+﻿@inject NotesApplication.Services.IThemeService ThemeService
+
+<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+    @{ var themes = ThemeService.GetAvailableThemeLabelByKeys(); }
+    @themes[ThemeService.GetCurrentThemeKey()]
+    <span class="caret"></span>
+</button>
+<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+    @foreach (var theme in themes)
+    {
+        <li role="presentation">
+            <a role="menuitem" tabindex="-1" asp-area="" asp-controller="ThemeSwitcher" asp-action="Update" asp-route-id="@theme.Key">@theme.Value</a>
+        </li>
+    }
+</ul>

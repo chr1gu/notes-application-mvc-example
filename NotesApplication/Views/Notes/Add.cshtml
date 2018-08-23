@@ -1,0 +1,9 @@
+﻿@using NotesApplication.Models.FormModels
+
+@{
+    ViewData["Title"] = "Add note";
+}
+
+<h1>Add note</h1>
+
+@await Html.PartialAsync("_NoteForm", NoteFormModel.New())
