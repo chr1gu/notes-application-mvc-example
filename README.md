@@ -2,7 +2,7 @@
 
 Demo: https://notes-application.sushee.ch/
 
-## Setup
+## Setup instructions
 
 ### dotnet CLI
 
