@@ -22,7 +22,8 @@ namespace NotesApplication
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<INoteService, NoteService>();
-            services.AddTransient<IThemeService, ThemeService>();
+            services.AddTransient<ITestDataService, TestDataService>();
+            services.AddTransient<IUserSettingsService, UserSettingsService>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddDbContext<NoteDbContext>(opt => opt.UseInMemoryDatabase());
@@ -37,8 +38,9 @@ namespace NotesApplication
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseTestData();
             }
+            
+            app.ApplicationServices.GetService<ITestDataService>().RestoreTestData();
             
             app.UseStatusCodePagesWithReExecute("/error", "?statusCode={0}");
 

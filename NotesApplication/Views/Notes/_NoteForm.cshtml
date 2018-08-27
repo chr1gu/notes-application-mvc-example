@@ -1,49 +1,70 @@
 ﻿@model NotesApplication.Models.FormModels.NoteFormModel
 
 <form asp-action="SubmitNote" asp-controller="Notes" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id"/>
+    <br>
 
-    <div class="form-group">
-        <label asp-for="Title"></label>
-        <input type="text" class="form-control" placeholder="Title" asp-for="Title">
+    <div class="form-group row">
+        <label asp-for="Title" class="col-md-2"></label>
+        <div class="col-md-10">
+            <input type="text" class="form-control" asp-for="Title">
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label asp-for="Description"></label>
-        <textarea class="form-control" asp-for="Description" rows="3"></textarea>
+    <div class="form-group row">
+        <label asp-for="Description" class="col-md-2"></label>
+        <div class="col-md-10">
+            <textarea class="form-control" asp-for="Description" rows="5"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label asp-for="Importance"></label>
-        <select class="form-control" asp-for="Importance">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-        </select>
+    <div class="form-group row">
+        <label asp-for="Importance" class="col-md-2"></label>
+        <div class="col-md-10">
+            <select class="form-control" asp-for="Importance">
+                <option>0</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+            </select>
+            <span asp-validation-for="Importance" class="text-danger"></span>
+        </div>
+    </div>
+    
+    <div class="form-group row">
+        <label asp-for="FinishedAt" class="col-md-2"></label>
+        <div class="col-md-10">
+            <input type="datetime-local" class="form-control" asp-for="FinishedAt" data-rule-optionaldatetimepicker="true">
+            <span asp-validation-for="FinishedAt" class="text-danger"></span>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label asp-for="FinishedAt"></label>
-        <input type="datetime-local" class="form-control" asp-for="FinishedAt">
-    </div>
-
-    <div class="form-check">
-        <label class="form-check-label" asp-for="IsFinished">
+    <div class="form-check row">
+        <label class="form-check-label col-md-12" asp-for="IsFinished">
             <input type="checkbox" class="form-check-input" asp-for="IsFinished">
+            Is finished
         </label>
     </div>
+    
+    <hr/>
 
     @if (Model.Id.HasValue)
     {
-        <button type="submit" class="btn btn-primary">Speichern</button>
+        <button type="submit" class="btn btn-primary">Save note</button>
+        <a class="btn btn-default" asp-area="" asp-controller="Notes" asp-action="Index">Cancel</a>
+        <a class="btn btn-danger pull-right" asp-area="" asp-controller="Notes" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
     }
     else
     {
-        <button type="submit" class="btn btn-primary">Hinzufügen</button>
+        <button type="submit" class="btn btn-primary">Add note</button>
+        <a class="btn btn-default" asp-area="" asp-controller="Notes" asp-action="Index">Cancel</a>
     }
 </form>
 
 <br>
-<a asp-area="" asp-controller="Notes" asp-action="Index">Back to list</a>
+<a asp-area="" asp-controller="Notes" asp-action="Index">Back to notes list</a>

@@ -5,11 +5,11 @@ namespace NotesApplication.Controllers
 {
     public class ThemeSwitcherController : Controller
     {
-        private readonly IThemeService themeService;
+        private readonly IUserSettingsService _userSettingsService;
 
-        public ThemeSwitcherController(IThemeService themeService)
+        public ThemeSwitcherController(IUserSettingsService userSettingsService)
         {
-            this.themeService = themeService;
+            _userSettingsService = userSettingsService;
         }
 
         public IActionResult Index()
@@ -19,7 +19,7 @@ namespace NotesApplication.Controllers
         
         public IActionResult Update(string id)
         {
-            themeService.ChangeTheme(id);
+            _userSettingsService.ChangeTheme(id);
             
             var referer = Request.Headers["Referer"].ToString();
             if (string.IsNullOrEmpty(referer))

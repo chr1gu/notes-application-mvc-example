@@ -1,23 +1,48 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using NotesApplication.Extensions;
 using NotesApplication.Models.FormModels;
-using NotesApplication.Models.ViewModels;
 using NotesApplication.Services;
 
 namespace NotesApplication.Controllers
 {
-    public class NotesController : Controller
+    public class NotesController : BaseController
     {
-        private readonly INoteService noteService;
+        private readonly INoteService _noteService;
+        private readonly IUserSettingsService _userSettingsService;
+        private readonly ITestDataService _testDataService;
         
-        public NotesController(INoteService noteService)
+        public NotesController(
+            INoteService noteService,
+            IUserSettingsService userSettingsService,
+            ITestDataService testDataService)
         {
-            this.noteService = noteService;
+            _noteService = noteService;
+            _userSettingsService = userSettingsService;
+            _testDataService = testDataService;
         }
 
-        public IActionResult Index(string orderBy = "createdAt", bool hideFinished = false)
+        public IActionResult Index(string orderBy = null, bool? hideFinished = null)
         {
-            var viewModel = noteService.GetNotesViewModel(orderBy, hideFinished);
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                _userSettingsService.ChangeSortOrder(orderBy);
+            }
+            else
+            {
+                orderBy = _userSettingsService.GetCurrentSortOrderKey();
+            }
+
+            if (hideFinished.HasValue)
+            {
+                _userSettingsService.ChangeHideFinished(hideFinished.Value);
+            }
+            else
+            {
+                hideFinished = _userSettingsService.GetShouldHideFinished();
+            }
+
+            var viewModel = _noteService.GetNotesViewModel(orderBy, hideFinished ?? false);
 
             return View(viewModel);
         }
@@ -31,35 +56,79 @@ namespace NotesApplication.Controllers
         {
             if (!id.HasValue)
             {
-                return BadRequest("Id must be specified");
+                return UserFriendlyBadRequestError("A valid note id must be provided!");
             }
             
-            var viewModel = noteService.GetNoteViewModel(id.Value);
+            var viewModel = _noteService.GetNoteViewModel(id.Value);
             
             if (viewModel == null)
             {
-                return NotFound($"Note with id {id} not found!");
+                return UserFriendlyNotFoundError($"Could not find a note with id {id}!");
             }
 
             return View(viewModel.ToFormModel());
+        }
+        
+        public IActionResult Delete(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return UserFriendlyBadRequestError("A valid note id must be provided!");
+            }
+
+            var success = _noteService.DeleteNote(id.Value);
+
+            if (!success)
+            {
+                return UserFriendlyNotFoundError($"Could not delete a note with id {id}!");
+            }
+
+            return RedirectToAction("Index", "Notes").WithSuccess("Success!", $"Note {id} has been deleted.");
+        }
+
+        public IActionResult RestoreTestData()
+        {
+            _testDataService.RestoreTestData();
+            
+            return RedirectToAction("Index", "Notes").WithWarning("Testdata has been restored!", $"");
         }
 
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult SubmitNote(NoteFormModel model)
         {
-            var success = false;
             var id = model.Id;
+            
+            if (!ModelState.IsValid)
+            {
+                var errorMessage = string.Join(' ', ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+
+                if (id.HasValue)
+                {
+                    return RedirectToAction("Edit", "Notes", new {id}).WithDanger("Validation error!", errorMessage);
+                }
+                else
+                {
+                    return RedirectToAction("Add", "Notes").WithDanger("Validation error!", errorMessage);
+                }
+            }
 
             if (id.HasValue)
             {
-                success = noteService.UpdateNote(model);
+                var success = _noteService.UpdateNote(model);
+                
+                if (!success)
+                {
+                    return UserFriendlyNotFoundError($"Could not update a note with id {id}!");
+                }
+
+                return RedirectToAction("Index", "Notes").WithSuccess("Success!", $"Note {id} has been updated.");
             }
             else
             {
-                id = noteService.AddNote(model);
+                id = _noteService.AddNote(model);
+                
+                return RedirectToAction("Index", "Notes").WithSuccess("Success!", $"Note {id} has been created.");
             }
-
-            return RedirectToAction("Edit", "Notes", new {id});
         }
     }
 }

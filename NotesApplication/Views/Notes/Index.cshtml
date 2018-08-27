@@ -1,51 +1,104 @@
-﻿@model NotesApplication.Models.ViewModels.NotesListViewModel
+﻿@using NotesApplication.Extensions
+@model NotesApplication.Models.ViewModels.NotesListViewModel
 
 @{
     ViewData["Title"] = "Notes";
 }
 
-
 <h1>Notes</h1>
 
-<ul class="list-inline">
-    <li>
+<div class="row">
+    <div class="col-md-12">
         <ul class="list-inline">
-            <li>Order by:</li>
-            <li class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-                    @(Model.AvailableSortOrders[Model.CurrentSortOrder])
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                    @foreach (var sortOrder in Model.AvailableSortOrders)
-                    {
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?orderBy=@(sortOrder.Key)&hideFinished=@(Model.HideFinished)">@(sortOrder.Value)</a></li> 
-                    }
+            <li>
+                <ul class="list-inline">
+                    <li>Ordered by:</li>
+                    <li class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                            @(Model.AvailableSortOrders[Model.CurrentSortOrder])
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            @foreach (var sortOrder in Model.AvailableSortOrders)
+                            {
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="?orderBy=@(sortOrder.Key)">@(sortOrder.Value)</a></li>
+                            }
+                        </ul>
+                    </li>
                 </ul>
             </li>
+            <li>
+                <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input"
+                           onchange="var val = this.checked ? '@bool.TrueString' : '@bool.FalseString';location.href = '?hideFinished=' + val;"
+                           @(Model.HideFinished ? "checked='checked'" : "")> Hide finished
+                </label>
+            </li>
+            <li class="pull-right">
+                <a class="btn btn-default" asp-area="" asp-controller="Notes" asp-action="Add"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New note</a>
+            </li>
         </ul>
-    </li>
-    <li>
-        <label class="form-check-label">
-            <input type="checkbox" class="form-check-input"> Hide finished
-        </label>
-    </li>
-</ul>
+    </div>
+</div>
 
-<hr />
+@if (Model.Notes.Count > 0)
+{
+    <br>
+    <div class="row">
+        <div class="col-sm-1 hidden-xs"><strong>Id</strong></div>
+        <div class="col-sm-2 hidden-xs"><strong>Metadata</strong></div>
+        <div class="col-sm-6 col-xs-9"><strong>Note</strong></div>
+        <div class="col-sm-3 col-xs-3 text-right"><strong>Actions</strong></div>
+    </div>
+    <hr>
+}
+else
+{
+    <div class="alert alert-info">
+        No notes to show for the moment. <strong><a asp-action="Add" asp-controller="Notes">Create a new note</a></strong>
+    </div>
+}
 
 @foreach (var note in Model.Notes)
 {
     <div class="row">
-        <div class="col-sm-2">
-            x
+        <div class="col-sm-1 hidden-xs">
+            @note.Id
         </div>
-        <div class="col-sm-8">
-            <h2>@note.Title</h2>
+        <div class="col-sm-2 col-xs-9">
+            <span data-toggle="tooltip" data-placement="top" title="Rating: @note.Importance star(s)">@Html.GetFiveStarRatingFromImportance(note.Importance)</span>
+            <br>
+            <div class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Created at @note.CreatedAt">@note.CreatedAt</div>
+            @if (note.IsFinished)
+            {
+                <br class="hidden-xs">
+                <div class="label label-success" data-toggle="tooltip" data-placement="bottom" title="Finished at @note.FinishedAt">
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> finished
+                </div>
+            }
+        </div>
+        <div class="col-xs-3 text-right pull-right">
+            <a class="btn btn-default hidden-xs" asp-area="" asp-controller="Notes" asp-action="Edit" asp-route-id="@note.Id">Edit</a>
+            <a class="btn btn-danger" asp-area="" asp-controller="Notes" asp-action="Delete" asp-route-id="@note.Id">
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="col-sm-6 col-xs-12 wrapper">
+            <h3 class="media-heading">
+                @note.Title
+            </h3>
             <p>@note.Description</p>
         </div>
-        <div class="col-sm-2">
-            <a class="btn btn-default" asp-area="" asp-controller="Notes" asp-action="Edit" asp-route-id="@note.Id">Edit</a>
+    </div>
+    
+    <div class="row visible-xs">
+        <div class="col-xs-12">
+            <a class="btn btn-default btn-group-justified" asp-area="" asp-controller="Notes" asp-action="Edit" asp-route-id="@note.Id">Edit</a>
         </div>
     </div>
+    
+    if (!Model.Notes.Last().Equals(note))
+    {
+        <hr>
+    }
 }

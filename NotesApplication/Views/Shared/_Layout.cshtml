@@ -4,14 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    @inject NotesApplication.Services.IThemeService ThemeService
+    @inject NotesApplication.Services.IUserSettingsService UserSettingsService
 
     <environment include="Development">
-        <link rel="stylesheet" href="~/css/bootstrap/@ThemeService.GetCurrentThemeKey()/bootstrap.css"/>
+        <link rel="stylesheet" href="~/css/bootstrap/@UserSettingsService.GetCurrentThemeKey()/bootstrap.css"/>
         <link rel="stylesheet" href="~/css/site.css"/>
     </environment>
     <environment exclude="Development">
-        <link rel="stylesheet" href="~/css/bootstrap/@ThemeService.GetCurrentThemeKey()/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/bootstrap/@UserSettingsService.GetCurrentThemeKey()/bootstrap.min.css" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 </head>
@@ -29,8 +29,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Notes" asp-action="Add">New note</a></li>
-                    <li class="visible-xs"><a asp-area="" asp-controller="ThemeSwitcher" asp-action="Index">Change theme</a></li>
+                    <li><a asp-area="" asp-controller="Notes" asp-action="Add">New Note</a></li>
+                    <li><a asp-area="" asp-controller="Notes" asp-action="RestoreTestData">Reset TestData</a></li>
+                    <li class="visible-xs"><a asp-area="" asp-controller="ThemeSwitcher" asp-action="Index">Change Theme</a></li>
                 </ul>
                 <div class="dropdown pull-right navbar-form hidden-xs">
                     @await Html.PartialAsync("_ThemeSwitcherDropDown")
@@ -39,6 +40,7 @@
         </div>
     </nav>
     <div class="container body-content">
+        @Html.Partial("_StatusMessages")
         @RenderBody()
         <hr />
         <footer>
@@ -48,8 +50,10 @@
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/moment-with-locales.js"></script>
     </environment>
     <environment exclude="Development">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
@@ -64,9 +68,13 @@
                 crossorigin="anonymous"
                 integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
         </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.min.js"></script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>
+        <script src="~/js/moment-with-locales.min.js"></script>
     </environment>
 
     @RenderSection("Scripts", required: false)
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
 </body>
 </html>
