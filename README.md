@@ -1,6 +1,6 @@
 # Notes Demo Application
 
-Public demo: _comming soon_
+Public demo: https://notes-application.sushee.ch/
 
 Local demo: http://localhost:5000
 
