@@ -1,12 +1,8 @@
 # Notes Demo Application
 
-Public demo: https://notes-application.sushee.ch/
+Demo: https://notes-application.sushee.ch/
 
-Local demo: http://localhost:5000
-
-## Local setup
-
-Either build & run it directly from within your favorite IDE or use the following CLI or Docker instructions:
+## Setup
 
 ### dotnet CLI
 
