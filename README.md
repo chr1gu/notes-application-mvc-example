@@ -2,6 +2,8 @@
 
 Demo: https://notes-application.sushee.ch/
 
+Ready-to-use Docker-Image: https://hub.docker.com/r/chrigu/notes-application-mvc-example/
+
 ## Setup instructions
 
 ### dotnet CLI
