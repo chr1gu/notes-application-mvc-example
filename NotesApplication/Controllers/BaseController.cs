@@ -7,16 +7,22 @@ namespace NotesApplication.Controllers
     {
         protected IActionResult UserFriendlyBadRequestError(string message)
         {
-            Response.StatusCode = (int) HttpStatusCode.BadRequest;
-            
-            return View("~/Views/Error/Index.cshtml", ErrorController.GetErrorViewModel(HttpContext, message));
+            return UserFriendlyError(message, HttpStatusCode.BadRequest);
         }
         
         protected IActionResult UserFriendlyNotFoundError(string message)
         {
-            Response.StatusCode = (int) HttpStatusCode.NotFound;
+            return UserFriendlyError(message, HttpStatusCode.NotFound);
+        }
+
+        protected IActionResult UserFriendlyError(string message, HttpStatusCode statusCode)
+        {
+            Response.StatusCode = (int) statusCode;
             
-            return View("~/Views/Error/Index.cshtml", ErrorController.GetErrorViewModel(HttpContext, message));
+            var view = View("~/Views/Error/Index.cshtml", ErrorController.GetErrorViewModel(HttpContext, message));
+            view.StatusCode = Response.StatusCode;
+
+            return view;
         }
     }
 }

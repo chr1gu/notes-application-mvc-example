@@ -54,7 +54,7 @@ namespace NotesApplication.Controllers
         
         public IActionResult Edit(int? id)
         {
-            if (!id.HasValue)
+            if (!id.HasValue || id <= 0)
             {
                 return UserFriendlyBadRequestError("A valid note id must be provided!");
             }
@@ -71,7 +71,7 @@ namespace NotesApplication.Controllers
         
         public IActionResult Delete(int? id)
         {
-            if (!id.HasValue)
+            if (!id.HasValue || id <= 0)
             {
                 return UserFriendlyBadRequestError("A valid note id must be provided!");
             }
