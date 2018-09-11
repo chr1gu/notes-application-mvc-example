@@ -21,6 +21,8 @@ namespace NotesApplication.Tests.Services
             optionsBuilder.UseInMemoryDatabase("Testdatabase");
             
             _dbContext = new NoteDbContext(optionsBuilder.Options);
+            _dbContext.Database.EnsureDeleted();
+            
             _userSettingsServiceMock = new Mock<IUserSettingsService>();
         }
         

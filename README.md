@@ -22,3 +22,11 @@ $ docker run --name notes-application -e ASPNETCORE_ENVIRONMENT=Development --rm
 
 Tested using Docker version 18.06.0-ce, build 0ffa825
 macOS High Sierra / 10.13.5 (17F77)
+
+
+## Running Tests
+
+```
+dotnet test -t NotesApplication.Tests/NotesApplication.Tests.csproj
+```
+
