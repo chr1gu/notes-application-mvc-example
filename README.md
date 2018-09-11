@@ -30,3 +30,8 @@ macOS High Sierra / 10.13.5 (17F77)
 dotnet test -t NotesApplication.Tests/NotesApplication.Tests.csproj
 ```
 
+### Controller Tests
+![Controller Tests](https://raw.githubusercontent.com/chrigu-ebert/notes-application-mvc-example/master/controller-tests.png)
+
+### Service Tests
+![Service Tests](https://raw.githubusercontent.com/chrigu-ebert/notes-application-mvc-example/master/service-tests.png)
